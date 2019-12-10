@@ -1,7 +1,12 @@
-import React from 'react';
+import React from "react";
+import Form from "../components/Form";
 
-export default function Expense(){
-  return(<div>
-    <h2>Expense Form </h2>
-  </div>)
+export default function Expense() {
+  return (
+    <div>
+      <h2>Expense Form </h2>
+
+      <Form />
+    </div>
+  );
 }
