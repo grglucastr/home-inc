@@ -1,9 +1,26 @@
 import React from "react";
+import expenseTypeService from "../services/expenseTypeService";
 
 export default function Form() {
+  const [expenseTypes, setExpenseTypes] = React.useState([]);
+  const [expense, setExpense] = React.useState({
+    description: "",
+    type: "",
+    cost: "",
+    dueDate: "",
+    invoiceDate: "",
+    serviceStart: "",
+    serviceEnd: ""
+  });
+
+  React.useEffect(() => {
+    expenseTypeService.listAll().then(response => setExpenseTypes(response));
+  }, []);
+
   const submitForm = e => {
     e.preventDefault();
     console.log("submitting form...");
+    console.log("expense", expense);
   };
 
   return (
@@ -18,18 +35,38 @@ export default function Form() {
             id="description"
             name="description"
             placeholder="Conta de Luz"
+            value={expense.description}
+            onChange={evt =>
+              setExpense({ ...expense, description: evt.target.value })
+            }
           />
         </div>
         <div>
           <label htmlFor="type">Type:</label>
-          <select id="type" name="type">
+          <select
+            id="type"
+            name="type"
+            value={expense.type}
+            onChange={evt => setExpense({ ...expense, type: evt.target.value })}
+          >
             <option disabled>Select Type</option>
-            <option value="electricity">Electricity</option>
+            {expenseTypes.map(exp => (
+              <option key={exp.id} value={exp.id}>
+                {exp.name}
+              </option>
+            ))}
           </select>
         </div>
         <div>
           <label htmlFor="cost">Cost:</label>
-          <input type="text" id="cost" name="cost" placeholder="R$ 150,00" />
+          <input
+            type="text"
+            id="cost"
+            name="cost"
+            placeholder="R$ 150,00"
+            value={expense.cost}
+            onChange={evt => setExpense({ ...expense, cost: evt.target.value })}
+          />
         </div>
         <div>
           <label htmlFor="dueDate">Due Date:</label>
@@ -38,6 +75,10 @@ export default function Form() {
             id="dueDate"
             name="dueDate"
             placeholder="2019-01-20"
+            value={expense.dueDate}
+            onChange={evt =>
+              setExpense({ ...expense, dueDate: evt.target.value })
+            }
           />
         </div>
         <div>
@@ -47,6 +88,10 @@ export default function Form() {
             id="invoiceDate"
             name="invoiceDate"
             placeholder="2019-01-15"
+            value={expense.invoiceDate}
+            onChange={evt =>
+              setExpense({ ...expense, invoiceDate: evt.target.value })
+            }
           />
         </div>
         <div>
@@ -56,6 +101,10 @@ export default function Form() {
             id="serviceStart"
             name="serviceStart"
             placeholder="2019-01-01"
+            value={expense.serviceStart}
+            onChange={evt =>
+              setExpense({ ...expense, serviceStart: evt.target.value })
+            }
           />
         </div>
         <div>
@@ -65,6 +114,10 @@ export default function Form() {
             id="serviceEnd"
             name="serviceEnd"
             placeholder="2019-01-30"
+            value={expense.serviceEnd}
+            onChange={evt =>
+              setExpense({ ...expense, serviceEnd: evt.target.value })
+            }
           />
         </div>
         <div>
