@@ -1,10 +1,13 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
+
 import expenseTypeService from "../services/expenseTypeService";
 import expenseService from "../services/expenseService";
 
-export default function Form() {
+export default withRouter(function Form({ history }) {
   const [expenseTypes, setExpenseTypes] = React.useState([]);
   const [expense, setExpense] = React.useState({
+    title: "",
     description: "",
     expenseType: { id: "" },
     cost: "",
@@ -24,7 +27,10 @@ export default function Form() {
     console.log("expense", expense);
     expenseService
       .save(expense)
-      .then(response => console.log("response", response))
+      .then(response => {
+        window.alert("Saved!");
+        history.push("/");
+      })
       .catch(err => console.error("Error on save", err));
   };
 
@@ -32,18 +38,19 @@ export default function Form() {
     <div>
       <form onSubmit={submitForm}>
         <div>
-          <label htmlFor="description">Description:</label>
+          <label htmlFor="title">Description:</label>
           <input
             type="text"
-            id="description"
-            name="description"
+            id="title"
+            name="title"
             placeholder="Conta de Luz"
-            value={expense.description}
+            value={expense.title}
             onChange={evt =>
-              setExpense({ ...expense, description: evt.target.value })
+              setExpense({ ...expense, title: evt.target.value })
             }
           />
         </div>
+
         <div>
           <label htmlFor="type">Type:</label>
           <select
@@ -126,10 +133,22 @@ export default function Form() {
           />
         </div>
         <div>
+          <label htmlFor="description">Comments:</label>
+          <textarea
+            type="text"
+            id="description"
+            name="description"
+            value={expense.description}
+            onChange={evt =>
+              setExpense({ ...expense, description: evt.target.value })
+            }
+          ></textarea>
+        </div>
+        <div>
           <button type="button">Cancel</button>
           <button type="submit">Save</button>
         </div>
       </form>
     </div>
   );
-}
+});
