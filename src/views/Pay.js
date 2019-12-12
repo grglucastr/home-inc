@@ -1,8 +1,19 @@
-import React from 'react';
-export default function Pay(){
-  return(
+import React from "react";
+import Table from "../components/Table";
+
+import expenseService from "../services/expenseService";
+
+export default function Pay() {
+  const [expenses, setExpenses] = React.useState([]);
+
+  React.useEffect(() => {
+    expenseService.listAll().then(expenses => setExpenses(expenses));
+  }, []);
+
+  return (
     <div>
-      <h2>Pay</h2>
+      <h2>To Pay</h2>
+      <Table expenses={expenses} />
     </div>
-  )
+  );
 }
