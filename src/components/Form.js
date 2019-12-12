@@ -1,11 +1,12 @@
 import React from "react";
 import expenseTypeService from "../services/expenseTypeService";
+import expenseService from "../services/expenseService";
 
 export default function Form() {
   const [expenseTypes, setExpenseTypes] = React.useState([]);
   const [expense, setExpense] = React.useState({
     description: "",
-    type: "",
+    expenseType: { id: "" },
     cost: "",
     dueDate: "",
     invoiceDate: "",
@@ -21,12 +22,14 @@ export default function Form() {
     e.preventDefault();
     console.log("submitting form...");
     console.log("expense", expense);
+    expenseService
+      .save(expense)
+      .then(response => console.log("response", response))
+      .catch(err => console.error("Error on save", err));
   };
 
   return (
     <div>
-      <h3>Expense</h3>
-
       <form onSubmit={submitForm}>
         <div>
           <label htmlFor="description">Description:</label>
@@ -46,8 +49,10 @@ export default function Form() {
           <select
             id="type"
             name="type"
-            value={expense.type}
-            onChange={evt => setExpense({ ...expense, type: evt.target.value })}
+            value={expense.expenseType.id}
+            onChange={evt =>
+              setExpense({ ...expense, expenseType: { id: evt.target.value } })
+            }
           >
             <option disabled>Select Type</option>
             {expenseTypes.map(exp => (
