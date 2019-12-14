@@ -2,11 +2,18 @@ import axios from "axios";
 import { BASE_URL } from "./constants";
 
 export default {
-  save: async expense => {
+  create: async expense => {
     const url = `${BASE_URL}/expenses`;
     const response = await axios.post(url, expense);
     const data = await response.data;
 
+    return data;
+  },
+
+  update: async expense => {
+    const url = `${BASE_URL}/expenses/${expense.id}`;
+    const response = await axios.put(url, expense);
+    const data = await response.data;
     return data;
   },
 

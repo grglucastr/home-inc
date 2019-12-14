@@ -23,11 +23,9 @@ export default withRouter(function Form({ history }) {
 
   const submitForm = e => {
     e.preventDefault();
-    console.log("submitting form...");
-    console.log("expense", expense);
     expenseService
-      .save(expense)
-      .then(response => {
+      .create(expense)
+      .then(() => {
         window.alert("Saved!");
         history.push("/");
       })
