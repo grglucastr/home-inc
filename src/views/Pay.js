@@ -10,10 +10,35 @@ export default function Pay() {
     expenseService.listAll().then(expenses => setExpenses(expenses));
   }, []);
 
+  const onPay = expense => {
+    const confirmed = window.confirm(
+      `Confirm expense payment?\n\nExpense:${expense.title}\nCost:${expense.cost}\nDue date:${expense.dueDate}`
+    );
+    console.log("details", expense);
+    const date = new Date();
+
+    const paidExpense = {
+      ...expense,
+      paid: true
+    };
+
+    if (confirmed) {
+      expenseService.update(paidExpense);
+      setExpenses(
+        expenses.map(exp => {
+          if (exp.id === paidExpense.id) {
+            return paidExpense;
+          }
+          return exp;
+        })
+      );
+    }
+  };
+
   return (
     <div>
       <h2>To Pay</h2>
-      <Table expenses={expenses} />
+      <Table expenses={expenses} onPay={expense => onPay(expense)} />
     </div>
   );
 }
