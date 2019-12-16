@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Table({ expenses, onPay }) {
   if (!expenses || expenses.length === 0) {
@@ -18,7 +19,7 @@ export default function Table({ expenses, onPay }) {
             <th>Cost</th>
             <th>Due Date</th>
             <th>Pay</th>
-            <th>Edit</th>
+            <th>Details</th>
           </tr>
         </thead>
 
@@ -33,6 +34,9 @@ export default function Table({ expenses, onPay }) {
                 {!expense.paid && (
                   <button onClick={() => onPay(expense)}>Pay</button>
                 )}
+              </td>
+              <td>
+                <Link to={`/expense/${expense.id}`}>Details</Link>
               </td>
             </tr>
           ))}

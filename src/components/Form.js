@@ -1,10 +1,11 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, useParams } from "react-router-dom";
 
 import expenseTypeService from "../services/expenseTypeService";
 import expenseService from "../services/expenseService";
 
 export default withRouter(function Form({ history }) {
+  const { id } = useParams("id");
   const [expenseTypes, setExpenseTypes] = React.useState([]);
   const [expense, setExpense] = React.useState({
     title: "",
@@ -13,13 +14,16 @@ export default withRouter(function Form({ history }) {
     cost: "",
     dueDate: "",
     invoiceDate: "",
-    serviceStart: "",
-    serviceEnd: ""
+    servicePeriodStart: "",
+    servicePeriodEnd: ""
   });
 
   React.useEffect(() => {
     expenseTypeService.listAll().then(response => setExpenseTypes(response));
-  }, []);
+    expenseService.findById(id).then(response => {
+      setExpense(response);
+    });
+  }, [id]);
 
   const submitForm = e => {
     e.preventDefault();
@@ -30,6 +34,10 @@ export default withRouter(function Form({ history }) {
         history.push("/");
       })
       .catch(err => console.error("Error on save", err));
+  };
+
+  const cancel = _ => {
+    history.goBack();
   };
 
   return (
@@ -54,7 +62,7 @@ export default withRouter(function Form({ history }) {
           <select
             id="type"
             name="type"
-            value={expense.expenseType.id}
+            value={expense.expenseType ? expense.expenseType.id : 1}
             onChange={evt =>
               setExpense({ ...expense, expenseType: { id: evt.target.value } })
             }
@@ -105,28 +113,28 @@ export default withRouter(function Form({ history }) {
           />
         </div>
         <div>
-          <label htmlFor="serviceStart">Service Start:</label>
+          <label htmlFor="servicePeriodStart">Service Start:</label>
           <input
             type="date"
-            id="serviceStart"
-            name="serviceStart"
+            id="servicePeriodStart"
+            name="servicePeriodStart"
             placeholder="2019-01-01"
-            value={expense.serviceStart}
+            value={expense.servicePeriodStart}
             onChange={evt =>
-              setExpense({ ...expense, serviceStart: evt.target.value })
+              setExpense({ ...expense, servicePeriodStart: evt.target.value })
             }
           />
         </div>
         <div>
-          <label htmlFor="serviceEnd">Service End:</label>
+          <label htmlFor="servicePeriodEnd">Service End:</label>
           <input
             type="date"
-            id="serviceEnd"
-            name="serviceEnd"
+            id="servicePeriodEnd"
+            name="servicePeriodEnd"
             placeholder="2019-01-30"
-            value={expense.serviceEnd}
+            value={expense.servicePeriodEnd}
             onChange={evt =>
-              setExpense({ ...expense, serviceEnd: evt.target.value })
+              setExpense({ ...expense, servicePeriodEnd: evt.target.value })
             }
           />
         </div>
@@ -143,7 +151,9 @@ export default withRouter(function Form({ history }) {
           ></textarea>
         </div>
         <div>
-          <button type="button">Cancel</button>
+          <button type="button" onClick={() => cancel()}>
+            Cancel
+          </button>
           <button type="submit">Save</button>
         </div>
       </form>
