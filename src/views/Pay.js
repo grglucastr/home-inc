@@ -14,8 +14,6 @@ export default function Pay() {
     const confirmed = window.confirm(
       `Confirm expense payment?\n\nExpense:${expense.title}\nCost:${expense.cost}\nDue date:${expense.dueDate}`
     );
-    console.log("details", expense);
-    const date = new Date();
 
     const paidExpense = {
       ...expense,
