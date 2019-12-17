@@ -19,11 +19,30 @@ export default withRouter(function Form({ history }) {
   });
 
   React.useEffect(() => {
-    expenseTypeService.listAll().then(response => setExpenseTypes(response));
-    expenseService.findById(id).then(response => {
-      setExpense(response);
-    });
-  }, [id]);
+    if (id) {
+      expenseTypeService.listAll().then(response => setExpenseTypes(response));
+      expenseService.findById(id).then(
+        response => {
+          setExpense(response);
+        },
+        err => {
+          history.push("/notFound");
+        }
+      );
+    } else {
+      setExpense({
+        id: "",
+        title: "",
+        description: "",
+        expenseType: { id: "" },
+        cost: "",
+        dueDate: "",
+        invoiceDate: "",
+        servicePeriodStart: "",
+        servicePeriodEnd: ""
+      });
+    }
+  }, [id, history]);
 
   const submitForm = e => {
     e.preventDefault();
@@ -38,6 +57,21 @@ export default withRouter(function Form({ history }) {
 
   const cancel = _ => {
     history.goBack();
+  };
+
+  const disableExpense = _ => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this expense?"
+    );
+
+    if (confirmed) {
+      expenseService.delete(id).then(response => {
+        if (response.status === 204) {
+          window.alert("Expense deleted!");
+          history.push("/");
+        }
+      });
+    }
   };
 
   return (
@@ -154,6 +188,13 @@ export default withRouter(function Form({ history }) {
           <button type="button" onClick={() => cancel()}>
             Cancel
           </button>
+
+          {id && (
+            <button type="button" onClick={() => disableExpense()}>
+              Delete
+            </button>
+          )}
+
           <button type="submit">Save</button>
         </div>
       </form>

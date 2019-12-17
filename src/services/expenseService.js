@@ -18,6 +18,12 @@ export default {
     return data;
   },
 
+  delete: async id => {
+    const url = `${BASE_URL}/${id}`;
+    const response = await axios.delete(url);
+    return response;
+  },
+
   listAll: async _ => {
     const response = await axios.get(BASE_URL);
     const data = await response.data;
@@ -27,7 +33,6 @@ export default {
   findById: async id => {
     const url = `${BASE_URL}/${id}`;
     const response = await axios.get(url);
-    const data = await response.data;
-    return data;
+    return response;
   }
 };
