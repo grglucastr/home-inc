@@ -30,6 +30,13 @@ export default {
     return data;
   },
 
+  listAllPaid: async _ => {
+    const url = `${BASE_URL}?paid=true`;
+    const response = await axios.get(url);
+    const data = await response.data;
+    return data;
+  },
+
   findById: async id => {
     const url = `${BASE_URL}/${id}`;
     const response = await axios.get(url);
