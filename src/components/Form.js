@@ -4,43 +4,33 @@ import { withRouter, useParams } from "react-router-dom";
 import expenseTypeService from "../services/expenseTypeService";
 import expenseService from "../services/expenseService";
 
+const newExepense = {
+  id: "",
+  title: "",
+  description: "",
+  expenseType: { id: "" },
+  cost: "",
+  dueDate: "",
+  invoiceDate: "",
+  servicePeriodStart: "",
+  servicePeriodEnd: "",
+  paid: false
+};
+
 export default withRouter(function Form({ history }) {
   const { id } = useParams("id");
   const [expenseTypes, setExpenseTypes] = React.useState([]);
-  const [expense, setExpense] = React.useState({
-    title: "",
-    description: "",
-    expenseType: { id: "" },
-    cost: "",
-    dueDate: "",
-    invoiceDate: "",
-    servicePeriodStart: "",
-    servicePeriodEnd: ""
-  });
+  const [expense, setExpense] = React.useState(newExepense);
 
   React.useEffect(() => {
     if (id) {
       expenseTypeService.listAll().then(response => setExpenseTypes(response));
       expenseService.findById(id).then(
-        response => {
-          setExpense(response);
-        },
-        err => {
-          history.push("/notFound");
-        }
+        response => setExpense(response.data),
+        () => history.push("/notFound")
       );
     } else {
-      setExpense({
-        id: "",
-        title: "",
-        description: "",
-        expenseType: { id: "" },
-        cost: "",
-        dueDate: "",
-        invoiceDate: "",
-        servicePeriodStart: "",
-        servicePeriodEnd: ""
-      });
+      setExpense(newExepense);
     }
   }, [id, history]);
 
@@ -184,6 +174,24 @@ export default withRouter(function Form({ history }) {
             }
           ></textarea>
         </div>
+
+        {expense.paid && (
+          <div>
+            <label htmlFor="paid">Status: </label>
+            <select
+              name="paid"
+              id="paid"
+              value={expense.paid}
+              onChange={evt =>
+                setExpense({ ...expense, paid: evt.target.value })
+              }
+            >
+              <option value={false}>Not Paid</option>
+              <option value={true}>Paid</option>
+            </select>
+          </div>
+        )}
+
         <div>
           <button type="button" onClick={() => cancel()}>
             Cancel
