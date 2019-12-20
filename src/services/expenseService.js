@@ -2,7 +2,7 @@ import axios from "axios";
 import { ROOT_URL } from "./constants";
 
 const resource = "/expenses";
-const BASE_URL = `${ROOT_URL}/${resource}`;
+const BASE_URL = `${ROOT_URL}${resource}`;
 
 export default {
   create: async expense => {
@@ -24,14 +24,25 @@ export default {
     return response;
   },
 
-  listAll: async _ => {
-    const response = await axios.get(BASE_URL);
-    const data = await response.data;
-    return data;
-  },
+  listAll: async params => {
+    let url = BASE_URL;
+    const queryParams = [];
+    if (params) {
+      for (let key in params) {
+        if (typeof params[key] === "object") {
+          const subKeys = params[key];
+          for (let subKey in subKeys) {
+            const str = `${subKey}=${subKeys[subKey]}`;
+            queryParams.push(str);
+          }
+        } else {
+          const str = `${key}=${params[key]}`;
+          queryParams.push(str);
+        }
+      }
+      url += `?${queryParams.join("&")}`;
+    }
 
-  listAllPaid: async _ => {
-    const url = `${BASE_URL}?paid=true`;
     const response = await axios.get(url);
     const data = await response.data;
     return data;

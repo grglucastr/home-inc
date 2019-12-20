@@ -1,9 +1,13 @@
 import React from "react";
 
+const currentYear = new Date().getFullYear();
+const currentMonth = new Date().getMonth() + 1;
+const lastDay = new Date(currentYear, currentMonth, 0).getDate();
+
 const emptyFilterParams = {
-  dueDatePeriod: {
-    dueDateStart: "",
-    dueDateEnd: ""
+  period: {
+    start: `${currentYear}-${currentMonth}-01`,
+    end: `${currentYear}-${currentMonth}-${lastDay}`
   },
   active: true
 };
@@ -17,15 +21,15 @@ export default function Filter({ onFilter }) {
         <label>Due Date:</label>
         <input
           type="date"
-          name="dueDateStart"
-          id="dueDateStart"
-          value={filterParams.dueDatePeriod.dueDateStart}
+          name="start"
+          id="start"
+          value={filterParams.period.start}
           onChange={evt =>
             setFilterParams({
               ...filterParams,
-              dueDatePeriod: {
-                ...filterParams.dueDatePeriod,
-                dueDateStart: evt.target.value
+              period: {
+                ...filterParams.period,
+                start: evt.target.value
               }
             })
           }
@@ -33,15 +37,15 @@ export default function Filter({ onFilter }) {
         <span> ~ </span>
         <input
           type="date"
-          name="dueDateEnd"
-          id="dueDateEnd"
-          value={filterParams.dueDatePeriod.dueDateEnd}
+          name="end"
+          id="end"
+          value={filterParams.period.end}
           onChange={evt =>
             setFilterParams({
               ...filterParams,
-              dueDatePeriod: {
-                ...filterParams.dueDatePeriod,
-                dueDateEnd: evt.target.value
+              period: {
+                ...filterParams.period,
+                end: evt.target.value
               }
             })
           }
