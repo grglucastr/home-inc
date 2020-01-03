@@ -23,8 +23,8 @@ export default withRouter(function Form({ history }) {
   const [expense, setExpense] = React.useState(newExepense);
 
   React.useEffect(() => {
+    expenseTypeService.listAll().then(response => setExpenseTypes(response));
     if (id) {
-      expenseTypeService.listAll().then(response => setExpenseTypes(response));
       expenseService.findById(id).then(
         response => setExpense(response.data),
         () => history.push("/notFound")
