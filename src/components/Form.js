@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { withRouter, useParams } from "react-router-dom";
 
 import expenseTypeService from "../services/expenseTypeService";
 import expenseService from "../services/expenseService";
+import periodicityService from "../services/periodicityService";
 
 const newExepense = {
   id: "",
@@ -19,8 +20,9 @@ const newExepense = {
 
 export default withRouter(function Form({ history }) {
   const { id } = useParams("id");
-  const [expenseTypes, setExpenseTypes] = React.useState([]);
-  const [expense, setExpense] = React.useState(newExepense);
+  const [expenseTypes, setExpenseTypes] = useState([]);
+  const [expense, setExpense] = useState(newExepense);
+  const [periodicities, setPeriodicities] = useState([]);
 
   React.useEffect(() => {
     expenseTypeService.listAll().then(response => setExpenseTypes(response));
@@ -32,6 +34,8 @@ export default withRouter(function Form({ history }) {
     } else {
       setExpense(newExepense);
     }
+
+    periodicityService.listAll().then(values => setPeriodicities(values));
   }, [id, history]);
 
   const submitForm = e => {
@@ -162,6 +166,18 @@ export default withRouter(function Form({ history }) {
             }
           />
         </div>
+
+        <div>
+          <label id="periodicity">Periodicity:</label>
+          <select id="periodicity">
+            {periodicities.map(p => (
+              <option key={p.value} value={p.value}>
+                {p.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div>
           <label htmlFor="description">Comments:</label>
           <textarea
