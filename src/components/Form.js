@@ -127,44 +127,12 @@ export default withRouter(function Form({ history }) {
             }
           />
         </div>
+
         <div>
-          <label htmlFor="invoiceDate">Invoice Date:</label>
-          <input
-            type="date"
-            id="invoiceDate"
-            name="invoiceDate"
-            placeholder="2019-01-15"
-            value={expense.invoiceDate}
-            onChange={evt =>
-              setExpense({ ...expense, invoiceDate: evt.target.value })
-            }
-          />
-        </div>
-        <div>
-          <label htmlFor="servicePeriodStart">Service Start:</label>
-          <input
-            type="date"
-            id="servicePeriodStart"
-            name="servicePeriodStart"
-            placeholder="2019-01-01"
-            value={expense.servicePeriodStart}
-            onChange={evt =>
-              setExpense({ ...expense, servicePeriodStart: evt.target.value })
-            }
-          />
-        </div>
-        <div>
-          <label htmlFor="servicePeriodEnd">Service End:</label>
-          <input
-            type="date"
-            id="servicePeriodEnd"
-            name="servicePeriodEnd"
-            placeholder="2019-01-30"
-            value={expense.servicePeriodEnd}
-            onChange={evt =>
-              setExpense({ ...expense, servicePeriodEnd: evt.target.value })
-            }
-          />
+          <label style={{ cursor: "pointer" }}>
+            <input type="checkbox" id="repeat" name="repeat" value="1" />
+            Repeat this action
+          </label>
         </div>
 
         <div>
@@ -177,6 +145,49 @@ export default withRouter(function Form({ history }) {
             ))}
           </select>
         </div>
+
+        <details>
+          <summary>Add more details</summary>
+          <div>
+            <label htmlFor="invoiceDate">Invoice Date:</label>
+            <input
+              type="date"
+              id="invoiceDate"
+              name="invoiceDate"
+              placeholder="2019-01-15"
+              value={expense.invoiceDate}
+              onChange={evt =>
+                setExpense({ ...expense, invoiceDate: evt.target.value })
+              }
+            />
+          </div>
+          <div>
+            <label htmlFor="servicePeriodStart">Service Start:</label>
+            <input
+              type="date"
+              id="servicePeriodStart"
+              name="servicePeriodStart"
+              placeholder="2019-01-01"
+              value={expense.servicePeriodStart}
+              onChange={evt =>
+                setExpense({ ...expense, servicePeriodStart: evt.target.value })
+              }
+            />
+          </div>
+          <div>
+            <label htmlFor="servicePeriodEnd">Service End:</label>
+            <input
+              type="date"
+              id="servicePeriodEnd"
+              name="servicePeriodEnd"
+              placeholder="2019-01-30"
+              value={expense.servicePeriodEnd}
+              onChange={evt =>
+                setExpense({ ...expense, servicePeriodEnd: evt.target.value })
+              }
+            />
+          </div>
+        </details>
 
         <div>
           <label htmlFor="description">Comments:</label>
