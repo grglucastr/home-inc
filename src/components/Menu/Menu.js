@@ -1,25 +1,30 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { Navbar, Nav } from "react-bootstrap";
 
 import "./styles.css";
 
 export default function Menu() {
+  const history = useHistory();
+
   return (
     <div>
-      <ul className="menu-container">
-        <li>
-          <Link to="/pay">Expenses to Pay</Link>{" "}
-        </li>
-        <li>
-          <Link to="/paid">Paid Expenses</Link>{" "}
-        </li>
-        <li>
-          <Link to="/report">Expenses Report</Link>{" "}
-        </li>
-        <li>
-          <Link to="/expense">Add New Expense</Link>{" "}
-        </li>
-      </ul>
+      <Navbar bg="light" variant="light">
+        <Nav className="mr-auto">
+          <Nav.Link onClick={() => history.push("/pay")}>
+            Expenses to Pay
+          </Nav.Link>
+          <Nav.Link onClick={() => history.push("/paid")}>
+            Paid Expenses
+          </Nav.Link>
+          <Nav.Link onClick={() => history.push("/report")}>
+            Expenses Report
+          </Nav.Link>
+          <Nav.Link onClick={() => history.push("/expense")}>
+            Add New Expense
+          </Nav.Link>
+        </Nav>
+      </Navbar>
     </div>
   );
 }
