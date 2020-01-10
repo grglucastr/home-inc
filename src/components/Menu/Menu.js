@@ -8,7 +8,7 @@ export default function Menu() {
   const history = useHistory();
 
   return (
-    <div>
+    <div style={{ marginBottom: "25px" }}>
       <Navbar bg="light" variant="light">
         <Nav className="mr-auto">
           <Nav.Link onClick={() => history.push("/pay")}>

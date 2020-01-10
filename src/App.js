@@ -7,9 +7,10 @@ function App() {
   return (
     <Router>
       <div>
-        <h1>Home.inc</h1>
-        <Menu />
-        <hr />
+        <header style={{ color: "#bebebe", backgroundColor: "#4f4f4f" }}>
+          <h1>Home.inc</h1>
+          <Menu />
+        </header>
 
         <Routes />
       </div>
