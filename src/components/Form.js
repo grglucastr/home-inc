@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { withRouter, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import expenseTypeService from "../services/expenseTypeService";
 import expenseService from "../services/expenseService";
@@ -18,11 +18,12 @@ const newExepense = {
   paid: false
 };
 
-export default withRouter(function Form({ history }) {
+export default function Form() {
   const { id } = useParams("id");
   const [expenseTypes, setExpenseTypes] = useState([]);
   const [expense, setExpense] = useState(newExepense);
   const [periodicities, setPeriodicities] = useState([]);
+  const history = useHistory();
 
   React.useEffect(() => {
     expenseTypeService.listAll().then(response => setExpenseTypes(response));
@@ -235,4 +236,4 @@ export default withRouter(function Form({ history }) {
       </form>
     </div>
   );
-});
+}
