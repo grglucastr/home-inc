@@ -31,7 +31,7 @@ export default function Paid() {
 
   return (
     <div>
-      <h2>Paid</h2>
+      <h4>Paid</h4>
       <Filter onFilter={params => doFilter(params)} />
       <Table expenses={expenses} />
     </div>

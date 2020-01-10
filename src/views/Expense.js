@@ -4,7 +4,7 @@ import Form from "../components/Form";
 export default function Expense() {
   return (
     <div>
-      <h3>Expense Registration </h3>
+      <h4>Expense Registration </h4>
       <Form />
     </div>
   );

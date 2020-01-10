@@ -37,7 +37,7 @@ export default function Pay() {
 
   return (
     <div>
-      <h2>To Pay</h2>
+      <h4>To Pay</h4>
       <Table expenses={expenses} onPay={expense => onPay(expense)} />
     </div>
   );

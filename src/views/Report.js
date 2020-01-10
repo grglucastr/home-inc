@@ -1,6 +1,8 @@
-import React from 'react';
-export default function Report(){
-  return(
-    <div><h2>Report</h2></div>
-  )
+import React from "react";
+export default function Report() {
+  return (
+    <div>
+      <h4>Report</h4>
+    </div>
+  );
 }
