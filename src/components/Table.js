@@ -40,7 +40,7 @@ export default function Table({ expenses, onPay }) {
         {(!expenses || expenses.length === 0) && (
           <tbody>
             <tr>
-              <td colspan="5" align="center">
+              <td colSpan="5" align="center">
                 Empty Values
               </td>
             </tr>
