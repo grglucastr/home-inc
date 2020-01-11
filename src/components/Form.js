@@ -28,6 +28,7 @@ const newExepense = {
   invoiceDate: "",
   servicePeriodStart: "",
   servicePeriodEnd: "",
+  periodicity: "JUST_ONCE",
   paid: false
 };
 
@@ -38,6 +39,7 @@ export default function Form() {
   const [periodicities, setPeriodicities] = useState([]);
   const [formDueDate, setFormDueDate] = useState(new Date());
   const [checkPaid, setCheckPaid] = useState(false);
+  const [repeatAction, setRepeatAction] = useState(false);
   const history = useHistory();
 
   React.useEffect(() => {
@@ -60,7 +62,12 @@ export default function Form() {
 
   const submitForm = e => {
     e.preventDefault();
-    setExpense({ ...expense, paid: checkPaid });
+    setExpense({
+      ...expense,
+      paid: checkPaid,
+      periodicity: repeatAction ? expense.periodicity : "JUST_ONCE"
+    });
+
     expenseService
       .create(expense)
       .then(() => {
@@ -166,21 +173,34 @@ export default function Form() {
             type="checkbox"
             id="repeat"
             name="repeat"
-            value="1"
+            value={repeatAction}
+            onChange={() => {
+              setExpense({ ...expense, periodicity: "YEARLY" });
+              setRepeatAction(!repeatAction);
+            }}
             label="Repeat this action"
           />
         </FormUI.Group>
 
-        <FormUI.Group>
-          <FormUI.Label id="periodicity">Periodicity</FormUI.Label>
-          <FormUI.Control as="select" id="periodicity" style={{ width: "20%" }}>
-            {periodicities.slice(1).map(p => (
-              <option key={p.value} value={p.value}>
-                {p.label}
-              </option>
-            ))}
-          </FormUI.Control>
-        </FormUI.Group>
+        {repeatAction && (
+          <FormUI.Group>
+            <FormUI.Label id="periodicity">Repeat periodicity</FormUI.Label>
+            <FormUI.Control
+              as="select"
+              id="periodicity"
+              style={{ width: "20%" }}
+              onChange={evt =>
+                setExpense({ ...expense, periodicity: evt.target.value })
+              }
+            >
+              {periodicities.slice(1).map(p => (
+                <option key={p.value} value={p.value}>
+                  {p.label}
+                </option>
+              ))}
+            </FormUI.Control>
+          </FormUI.Group>
+        )}
 
         {expense.paid && (
           <FormUI.Group>
