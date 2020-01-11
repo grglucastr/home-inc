@@ -1,8 +1,18 @@
 import React, { useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { Form as FormUI, Button, Container, Row, Col } from "react-bootstrap";
+import {
+  Form as FormUI,
+  Button,
+  Container,
+  Row,
+  Col,
+  ButtonToolbar,
+  ToggleButtonGroup,
+  ToggleButton
+} from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import CurrencyInput from "react-currency-input";
+import CheckIcon from "./CheckIcon";
 
 import expenseTypeService from "../services/expenseTypeService";
 import expenseService from "../services/expenseService";
@@ -27,6 +37,7 @@ export default function Form() {
   const [expense, setExpense] = useState(newExepense);
   const [periodicities, setPeriodicities] = useState([]);
   const [formDueDate, setFormDueDate] = useState(new Date());
+  const [checkPaid, setCheckPaid] = useState(false);
   const history = useHistory();
 
   React.useEffect(() => {
@@ -36,6 +47,7 @@ export default function Form() {
         response => {
           setExpense(response.data);
           setFormDueDate(new Date(response.data.dueDate));
+          setCheckPaid(response.data.paid);
         },
         () => history.push("/notFound")
       );
@@ -48,6 +60,7 @@ export default function Form() {
 
   const submitForm = e => {
     e.preventDefault();
+    setExpense({ ...expense, paid: checkPaid });
     expenseService
       .create(expense)
       .then(() => {
@@ -172,20 +185,29 @@ export default function Form() {
         {expense.paid && (
           <FormUI.Group>
             <FormUI.Label htmlFor="paid">Status</FormUI.Label>
-            <FormUI.Control
-              as="select"
-              name="paid"
-              id="paid"
-              className="form-control"
-              style={{ width: "50%" }}
-              value={expense.paid}
-              onChange={evt =>
-                setExpense({ ...expense, paid: evt.target.value })
-              }
-            >
-              <option value={false}>Not Paid</option>
-              <option value={true}>Paid</option>
-            </FormUI.Control>
+
+            <ButtonToolbar>
+              <ToggleButtonGroup
+                type="radio"
+                name="paid"
+                defaultValue={checkPaid}
+                value={checkPaid}
+                onChange={status => setCheckPaid(status)}
+              >
+                <ToggleButton
+                  variant="warning"
+                  value={false}
+                  checked={checkPaid}
+                >
+                  <CheckIcon visible={!checkPaid} />
+                  Not Paid
+                </ToggleButton>
+                <ToggleButton variant="success" value={true}>
+                  <CheckIcon visible={checkPaid} />
+                  Paid
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </ButtonToolbar>
           </FormUI.Group>
         )}
 
