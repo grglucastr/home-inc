@@ -17,14 +17,15 @@ import CheckIcon from "./CheckIcon";
 import expenseTypeService from "../services/expenseTypeService";
 import expenseService from "../services/expenseService";
 import periodicityService from "../services/periodicityService";
+import converterToSimpleDate from "../util/convertToSimpleDate";
 
 const newExepense = {
   id: "",
   title: "",
   description: "",
   expenseType: { id: "" },
-  cost: "",
-  dueDate: "",
+  cost: 0,
+  dueDate: converterToSimpleDate(new Date()),
   invoiceDate: "",
   servicePeriodStart: "",
   servicePeriodEnd: "",
@@ -48,7 +49,8 @@ export default function Form() {
       expenseService.findById(id).then(
         response => {
           setExpense(response.data);
-          setFormDueDate(new Date(response.data.dueDate));
+          const arrDueDate = response.data.dueDate.split("-");
+          setFormDueDate(new Date(arrDueDate[0], arrDueDate[1], arrDueDate[2]));
           setCheckPaid(response.data.paid);
         },
         () => history.push("/notFound")
@@ -147,7 +149,9 @@ export default function Form() {
               name="cost"
               placeholder="R$ 150,00"
               value={expense.cost}
-              onChange={cost => setExpense({ ...expense, cost })}
+              onChange={(evt, value, maskedValue) =>
+                setExpense({ ...expense, cost: value })
+              }
               className="form-control"
               style={{ width: "20%" }}
             />
@@ -159,11 +163,19 @@ export default function Form() {
             <DatePicker
               id="dueDate"
               name="dueDate"
+              required="required"
               placeholderText="2019-01-20"
               className="form-control"
               dateFormat="yyyy-MM-dd"
               selected={formDueDate}
-              onChange={date => setFormDueDate(date)}
+              value={formDueDate}
+              onChange={date => {
+                setFormDueDate(date);
+                setExpense({
+                  ...expense,
+                  dueDate: converterToSimpleDate(date)
+                });
+              }}
             />
           </div>
         </FormUI.Group>
