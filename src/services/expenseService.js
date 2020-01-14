@@ -5,10 +5,11 @@ const resource = "/expenses";
 const BASE_URL = `${ROOT_URL}${resource}`;
 
 export default {
-  create: async expense => {
-    const response = await axios.post(BASE_URL, expense);
-    const data = await response.data;
-    return data;
+  create: expense => {
+    return axios
+      .post(BASE_URL, expense)
+      .then(response => response.data)
+      .catch(err => alert(err));
   },
 
   update: async expense => {
