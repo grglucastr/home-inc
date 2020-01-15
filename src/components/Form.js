@@ -49,6 +49,9 @@ export default function Form() {
       expenseService.findById(id).then(
         response => {
           setExpense(response.data);
+          if (response.data.periodicity !== "JUST_ONCE") {
+            setRepeatAction(true);
+          }
           const arrDueDate = response.data.dueDate.split("-");
           setFormDueDate(new Date(arrDueDate[0], arrDueDate[1], arrDueDate[2]));
           setCheckPaid(response.data.paid);
@@ -186,6 +189,7 @@ export default function Form() {
             id="repeat"
             name="repeat"
             value={repeatAction}
+            checked={repeatAction}
             onChange={() => {
               setExpense({ ...expense, periodicity: "YEARLY" });
               setRepeatAction(!repeatAction);
@@ -201,6 +205,7 @@ export default function Form() {
               as="select"
               id="periodicity"
               style={{ width: "20%" }}
+              value={expense.periodicity}
               onChange={evt =>
                 setExpense({ ...expense, periodicity: evt.target.value })
               }
