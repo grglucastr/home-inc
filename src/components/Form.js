@@ -52,14 +52,14 @@ export default function Form() {
           if (response.data.periodicity !== "JUST_ONCE") {
             setRepeatAction(true);
           }
-          const arrDueDate = response.data.dueDate.split("-");
-          setFormDueDate(new Date(arrDueDate[0], arrDueDate[1], arrDueDate[2]));
+          setFormDueDate(new Date(response.data.dueDate.replace(/-/g, "/")));
           setCheckPaid(response.data.paid);
         },
         () => history.push("/notFound")
       );
     } else {
       setExpense(newExepense);
+      setFormDueDate(new Date());
     }
 
     periodicityService.listAll().then(values => setPeriodicities(values));
