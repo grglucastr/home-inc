@@ -9,7 +9,7 @@ export default function Pay() {
   React.useEffect(() => {
     expenseService
       .listAll({ active: true })
-      .then(expenses => setExpenses(expenses));
+      .then(expenses => setExpenses(expenses.content));
   }, []);
 
   const onPay = expense => {
